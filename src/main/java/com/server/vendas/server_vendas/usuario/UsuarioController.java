@@ -26,28 +26,28 @@ public class UsuarioController {
 
   @PostMapping
   public ResponseEntity<UsuarioDto> createUsuario(@RequestBody @Valid NoIdUsuarioDto usuario) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(this.usuarioService.save(usuario));
+    return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
   }
 
   @GetMapping
   public ResponseEntity<FindAllUsuarioDto> findAllUsuarios() {
-    return ResponseEntity.status(HttpStatus.OK).body(this.usuarioService.findAll());
+    return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findAll());
   }
 
   @GetMapping("{id}")
   public ResponseEntity<CompleteUsuarioDto> findById(@PathVariable UUID id) {
-    return ResponseEntity.status(HttpStatus.OK).body(this.usuarioService.findById(id));
+    return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findById(id));
   }
 
   @PatchMapping("{id}")
   public ResponseEntity<UsuarioDto> updateUsuario(
       @PathVariable UUID id, @RequestBody @Valid NoIdUsuarioDto usuarioDto) {
-    return ResponseEntity.status(HttpStatus.OK).body(this.usuarioService.update(id, usuarioDto));
+    return ResponseEntity.status(HttpStatus.OK).body(usuarioService.update(id, usuarioDto));
   }
 
   @DeleteMapping("{id}")
-  public ResponseEntity<Object> deleteUsuario(@PathVariable UUID id) {
-    this.usuarioService.delete(id);
+  public ResponseEntity<String> deleteUsuario(@PathVariable UUID id) {
+    usuarioService.delete(id);
     return ResponseEntity.status(HttpStatus.OK).body("Usuário removido com sucesso");
   }
 }

@@ -24,28 +24,28 @@ public class ContatoController {
 
   @PostMapping
   public ResponseEntity<ContatoDto> createUsuario(@RequestBody @Valid ContatoDto contato) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(this.contatoService.save(contato));
+    return ResponseEntity.status(HttpStatus.CREATED).body(contatoService.save(contato));
   }
 
   @GetMapping
   public ResponseEntity<FindAllContatoDto> findAllUsuarios() {
-    return ResponseEntity.status(HttpStatus.OK).body(this.contatoService.findAll());
+    return ResponseEntity.status(HttpStatus.OK).body(contatoService.findAll());
   }
 
   @GetMapping("{id}")
   public ResponseEntity<ContatoDto> findById(@PathVariable UUID id) {
-    return ResponseEntity.status(HttpStatus.OK).body(this.contatoService.findById(id));
+    return ResponseEntity.status(HttpStatus.OK).body(contatoService.findById(id));
   }
 
   @PatchMapping("{id}")
   public ResponseEntity<ContatoDto> updateUsuario(
       @PathVariable UUID id, @RequestBody @Valid ContatoDto contatoDto) {
-    return ResponseEntity.status(HttpStatus.OK).body(this.contatoService.update(id, contatoDto));
+    return ResponseEntity.status(HttpStatus.OK).body(contatoService.update(id, contatoDto));
   }
 
   @DeleteMapping("{id}")
   public ResponseEntity<Object> deleteUsuario(@PathVariable UUID id) {
-    this.contatoService.delete(id);
+    contatoService.delete(id);
     return ResponseEntity.status(HttpStatus.OK).body("Usuário removido com sucesso");
   }
 }
