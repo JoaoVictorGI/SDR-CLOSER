@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import java.util.Date;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -39,12 +40,14 @@ public class ContatoModel {
   private Date dtNascimento;
 
   @NonNull
+  @Size(min = 8, max = 16)
   @Column(name = "nr_celular")
   private String nrCelular;
 
   @Column(name = "nm_empresa")
   private String nmEmpresa;
 
+  @Size(min = 13, max = 19)
   private String cnpj;
 
   private String endereco;
