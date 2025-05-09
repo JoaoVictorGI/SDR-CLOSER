@@ -6,7 +6,7 @@ import com.server.vendas.server_vendas.usuario.dto.NoIdUsuarioDto;
 import com.server.vendas.server_vendas.usuario.dto.UsuarioDto;
 import jakarta.validation.Valid;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("usuario")
 public class UsuarioController {
 
-  @Autowired UsuarioService usuarioService;
+  private final UsuarioService usuarioService;
 
   @PostMapping
   public ResponseEntity<UsuarioDto> createUsuario(@RequestBody @Valid NoIdUsuarioDto usuario) {

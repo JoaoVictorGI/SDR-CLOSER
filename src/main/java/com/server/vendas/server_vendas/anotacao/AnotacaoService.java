@@ -3,16 +3,17 @@ package com.server.vendas.server_vendas.anotacao;
 import com.server.vendas.server_vendas.anotacao.dto.AnotacaoDto;
 import com.server.vendas.server_vendas.anotacao.dto.FindAllAnotacaoDto;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@RequiredArgsConstructor
 public class AnotacaoService {
 
-  @Autowired AnotacaoRepository anotacaoRepository;
+  private final AnotacaoRepository anotacaoRepository;
 
   public AnotacaoDto save(AnotacaoDto anotacaoDto) {
     var anotacaoModel = new AnotacaoModel();

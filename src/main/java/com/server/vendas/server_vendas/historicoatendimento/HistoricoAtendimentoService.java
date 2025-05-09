@@ -3,16 +3,17 @@ package com.server.vendas.server_vendas.historicoatendimento;
 import com.server.vendas.server_vendas.historicoatendimento.dto.FindAllHistoricoAtendimentoDto;
 import com.server.vendas.server_vendas.historicoatendimento.dto.HistoricoAtendimentoDto;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@RequiredArgsConstructor
 public class HistoricoAtendimentoService {
 
-  @Autowired HistoricoAtendimentoRepository historicoAtendimentoRepository;
+  private final HistoricoAtendimentoRepository historicoAtendimentoRepository;
 
   public HistoricoAtendimentoDto save(HistoricoAtendimentoDto historicoAtendimentoDto) {
     var historicoModel = new HistoricoAtendimentoModel();

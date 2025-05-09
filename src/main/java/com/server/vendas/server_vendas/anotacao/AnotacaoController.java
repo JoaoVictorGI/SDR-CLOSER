@@ -2,25 +2,26 @@ package com.server.vendas.server_vendas.anotacao;
 
 import com.server.vendas.server_vendas.anotacao.dto.AnotacaoDto;
 import com.server.vendas.server_vendas.anotacao.dto.FindAllAnotacaoDto;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("anotacao")
 public class AnotacaoController {
 
-  @Autowired AnotacaoService anotacaoService;
+  private final AnotacaoService anotacaoService;
 
   @PostMapping
   public ResponseEntity<AnotacaoDto> create(@RequestBody @Valid AnotacaoDto anotacaoDto) {

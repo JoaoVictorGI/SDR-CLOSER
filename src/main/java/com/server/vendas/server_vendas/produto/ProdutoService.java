@@ -2,20 +2,27 @@ package com.server.vendas.server_vendas.produto;
 
 import com.server.vendas.server_vendas.produto.dto.FindAllProdutoDto;
 import com.server.vendas.server_vendas.produto.dto.ProdutoDto;
+import com.server.vendas.server_vendas.script.ScriptMapper;
+import com.server.vendas.server_vendas.script.ScriptService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@RequiredArgsConstructor
 public class ProdutoService {
 
-  @Autowired ProdutoRepository produtoRepository;
+  private final ProdutoRepository produtoRepository;
+  private final ScriptService scriptService;
 
   public ProdutoDto save(ProdutoDto produtoDto) {
+    var scriptModel = ScriptMapper.toModel(scriptService.findById(produtoDto.idScript()));
+
     var produtoModel = new ProdutoModel();
-    BeanUtils.copyProperties(produtoDto, produtoModel);
+    BeanUtils.copyProperties(produtoDto, produtoModel, "idScript");
+    produtoModel.setIdScript(scriptModel);
 
     return ProdutoMapper.toDto(produtoRepository.save(produtoModel));
   }

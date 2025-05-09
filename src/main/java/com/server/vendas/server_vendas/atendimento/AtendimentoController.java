@@ -2,9 +2,10 @@ package com.server.vendas.server_vendas.atendimento;
 
 import com.server.vendas.server_vendas.atendimento.dto.AtendimentoDto;
 import com.server.vendas.server_vendas.atendimento.dto.FindAllAtendimentoDto;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import com.server.vendas.server_vendas.atendimento.dto.RequestAtendimentoDto;
+import com.server.vendas.server_vendas.atendimento.dto.UpdateAtendimentoDto;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,17 +13,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("atendimento")
 public class AtendimentoController {
 
-  @Autowired AtendimentoService atendimentoService;
+  private final AtendimentoService atendimentoService;
 
   @PostMapping
-  public ResponseEntity<AtendimentoDto> create(@RequestBody @Valid AtendimentoDto atendimentoDto) {
+  public ResponseEntity<AtendimentoDto> create(
+      @RequestBody @Valid RequestAtendimentoDto atendimentoDto) {
     return ResponseEntity.status(HttpStatus.OK).body(atendimentoService.save(atendimentoDto));
   }
 
@@ -38,7 +42,7 @@ public class AtendimentoController {
 
   @PatchMapping("{id}")
   public ResponseEntity<AtendimentoDto> update(
-      @PathVariable Long id, @RequestBody @Valid AtendimentoDto atendimentoDto) {
+      @PathVariable Long id, @RequestBody @Valid UpdateAtendimentoDto atendimentoDto) {
     return ResponseEntity.status(HttpStatus.OK).body(atendimentoService.update(id, atendimentoDto));
   }
 

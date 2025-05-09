@@ -5,17 +5,18 @@ import com.server.vendas.server_vendas.usuario.dto.FindAllUsuarioDto;
 import com.server.vendas.server_vendas.usuario.dto.NoIdUsuarioDto;
 import com.server.vendas.server_vendas.usuario.dto.UsuarioDto;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@RequiredArgsConstructor
 public class UsuarioService {
 
-  @Autowired UsuarioRepository usuarioRepository;
+  private final UsuarioRepository usuarioRepository;
 
   public UsuarioDto save(NoIdUsuarioDto noIdUsuarioDto) {
     var hashSenha = new BCryptPasswordEncoder().encode(noIdUsuarioDto.senha());

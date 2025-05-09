@@ -1,22 +1,23 @@
 package com.server.vendas.server_vendas.script;
 
+import com.server.vendas.server_vendas.script.dto.CreateScriptRequest;
 import com.server.vendas.server_vendas.script.dto.FindAllScriptDto;
 import com.server.vendas.server_vendas.script.dto.ScriptDto;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@RequiredArgsConstructor
 public class ScriptService {
 
-  @Autowired ScriptRepository scriptRepository;
+  private final ScriptRepository scriptRepository;
 
-  public ScriptDto save(ScriptDto scriptDto) {
-    var scriptModel = new ScriptModel();
-    BeanUtils.copyProperties(scriptDto, scriptModel);
+  public ScriptDto save(CreateScriptRequest script) {
+    var scriptModel = new ScriptModel(null, script.script());
 
     return ScriptMapper.toDto(scriptRepository.save(scriptModel));
   }
