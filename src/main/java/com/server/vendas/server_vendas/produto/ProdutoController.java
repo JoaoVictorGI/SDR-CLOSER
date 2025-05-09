@@ -37,7 +37,7 @@ public class ProdutoController {
     return ResponseEntity.status(HttpStatus.OK).body(produtoService.findById(id));
   }
 
-  @PatchMapping
+  @PatchMapping("{id}")
   public ResponseEntity<ProdutoDto> update(
       @PathVariable Long id, @RequestBody @Valid ProdutoDto produtoDto) {
     return ResponseEntity.status(HttpStatus.OK).body(produtoService.update(id, produtoDto));

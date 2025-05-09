@@ -2,6 +2,7 @@ package com.server.vendas.server_vendas.script;
 
 import com.server.vendas.server_vendas.script.dto.CreateScriptRequest;
 import com.server.vendas.server_vendas.script.dto.FindAllScriptDto;
+import com.server.vendas.server_vendas.script.dto.NoIdScriptDto;
 import com.server.vendas.server_vendas.script.dto.ScriptDto;
 import jakarta.validation.Valid;
 import java.util.UUID;
@@ -41,7 +42,7 @@ public class ScriptController {
 
   @PatchMapping("{id}")
   public ResponseEntity<ScriptDto> update(
-      @PathVariable @Valid UUID id, @RequestBody @Valid ScriptDto scriptDto) {
+      @PathVariable @Valid UUID id, @RequestBody @Valid NoIdScriptDto scriptDto) {
     return ResponseEntity.status(HttpStatus.OK).body(scriptService.update(id, scriptDto));
   }
 

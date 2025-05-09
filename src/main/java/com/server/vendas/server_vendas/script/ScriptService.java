@@ -2,6 +2,7 @@ package com.server.vendas.server_vendas.script;
 
 import com.server.vendas.server_vendas.script.dto.CreateScriptRequest;
 import com.server.vendas.server_vendas.script.dto.FindAllScriptDto;
+import com.server.vendas.server_vendas.script.dto.NoIdScriptDto;
 import com.server.vendas.server_vendas.script.dto.ScriptDto;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class ScriptService {
     return new FindAllScriptDto(scripts);
   }
 
-  public ScriptDto update(UUID id, ScriptDto scriptDto) {
+  public ScriptDto update(UUID id, NoIdScriptDto scriptDto) {
     ScriptModel scriptModel =
         scriptRepository
             .findById(id)
