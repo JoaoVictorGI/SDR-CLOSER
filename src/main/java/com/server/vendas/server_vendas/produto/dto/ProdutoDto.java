@@ -1,5 +1,6 @@
 package com.server.vendas.server_vendas.produto.dto;
 
-import com.server.vendas.server_vendas.script.ScriptModel;
+import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 
-public record ProdutoDto(String nmProduto, ScriptModel idScript) {}
+public record ProdutoDto(String nmProduto, @NotNull UUID idScript) {}

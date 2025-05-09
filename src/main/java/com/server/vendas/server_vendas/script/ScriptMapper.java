@@ -4,6 +4,10 @@ import com.server.vendas.server_vendas.script.dto.ScriptDto;
 
 public class ScriptMapper {
   public static ScriptDto toDto(ScriptModel scriptModel) {
-    return new ScriptDto(scriptModel.getScript());
+    return new ScriptDto(scriptModel.getIdScript(), scriptModel.getScript());
+  }
+
+  public static ScriptModel toModel(ScriptDto scriptDto) {
+    return new ScriptModel(scriptDto.idScript(), scriptDto.script());
   }
 }
