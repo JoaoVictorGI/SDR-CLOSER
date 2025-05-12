@@ -58,4 +58,16 @@ public class AnotacaoService {
 
     anotacaoRepository.delete(anotacaoModel);
   }
+
+  public AnotacaoDto findByIdAtendimento(Long id) {
+    var anotacaoModel =
+        anotacaoRepository
+            .findByIdAtendimento(1L)
+            .orElseThrow(
+                () ->
+                    new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Atendimento não encontrado"));
+
+    return AnotacaoMapper.toDto(anotacaoModel);
+  }
 }

@@ -1,9 +1,10 @@
-package com.server.vendas.server_vendas.usuario;
+package com.server.vendas.server_vendas.usuario.controller;
 
 import com.server.vendas.server_vendas.usuario.dto.CompleteUsuarioDto;
 import com.server.vendas.server_vendas.usuario.dto.FindAllUsuarioDto;
 import com.server.vendas.server_vendas.usuario.dto.NoIdUsuarioDto;
 import com.server.vendas.server_vendas.usuario.dto.UsuarioDto;
+import com.server.vendas.server_vendas.usuario.service.UsuarioService;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

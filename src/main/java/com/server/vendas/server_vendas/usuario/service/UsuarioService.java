@@ -1,5 +1,8 @@
-package com.server.vendas.server_vendas.usuario;
+package com.server.vendas.server_vendas.usuario.service;
 
+import com.server.vendas.server_vendas.usuario.UsuarioMapper;
+import com.server.vendas.server_vendas.usuario.UsuarioModel;
+import com.server.vendas.server_vendas.usuario.UsuarioRepository;
 import com.server.vendas.server_vendas.usuario.dto.CompleteUsuarioDto;
 import com.server.vendas.server_vendas.usuario.dto.FindAllUsuarioDto;
 import com.server.vendas.server_vendas.usuario.dto.NoIdUsuarioDto;

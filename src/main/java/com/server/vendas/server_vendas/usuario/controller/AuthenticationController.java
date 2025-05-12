@@ -1,0 +1,61 @@
+package com.server.vendas.server_vendas.usuario.controller;
+
+import com.server.vendas.server_vendas.security.JwtUtil;
+import com.server.vendas.server_vendas.usuario.UsuarioModel;
+import com.server.vendas.server_vendas.usuario.UsuarioRepository;
+import com.server.vendas.server_vendas.usuario.dto.NoIdUsuarioDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+@RestController
+@RequiredArgsConstructor
+public class AuthenticationController {
+
+  private final AuthenticationManager authenticationManager;
+  private final UsuarioRepository usuarioRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final JwtUtil jwtUtil;
+
+  @PostMapping("auth/signin")
+  public String authenticateUsuario(@RequestBody UsuarioModel usuario) {
+
+    var savedPassword =
+        usuarioRepository
+            .findByEmail(usuario.getEmail())
+            .orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+    if (new BCryptPasswordEncoder().matches(usuario.getSenha(), savedPassword.getPassword())) {
+      var authentication =
+          authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(usuario.getEmail(), usuario.getSenha()));
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      return jwtUtil.generateToken(userDetails.getUsername());
+    }
+
+    return "Error: e-mail ou senha incorreta";
+  }
+
+  @PostMapping("auth/signup")
+  public String registerUsuario(@RequestBody NoIdUsuarioDto usuario) {
+    if (usuarioRepository.existsByUsername(usuario.email())) {
+      return "Error: usuário já existe";
+    }
+
+    var hashSenha = new BCryptPasswordEncoder().encode(usuario.senha());
+
+    var novoUsuario =
+        new UsuarioModel(null, usuario.nome(), usuario.email(), hashSenha, usuario.cargo());
+    usuarioRepository.save(novoUsuario);
+    return "Usuário salvo com sucesso!";
+  }
+}

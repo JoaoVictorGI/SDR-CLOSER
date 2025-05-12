@@ -1,5 +1,7 @@
 package com.server.vendas.server_vendas.atendimento;
 
+import com.server.vendas.server_vendas.anotacao.AnotacaoService;
+import com.server.vendas.server_vendas.anotacao.dto.AnotacaoDto;
 import com.server.vendas.server_vendas.atendimento.dto.AtendimentoDto;
 import com.server.vendas.server_vendas.atendimento.dto.FindAllAtendimentoDto;
 import com.server.vendas.server_vendas.atendimento.dto.RequestAtendimentoDto;
@@ -12,8 +14,12 @@ import com.server.vendas.server_vendas.produto.ProdutoRepository;
 import com.server.vendas.server_vendas.usuario.UsuarioRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,6 +33,7 @@ public class AtendimentoService {
   private final ContatoRepository contatoRepository;
   private final ProdutoRepository produtoRepository;
   private final HistoricoAtendimentoRepository historicoAtendimentoRepository;
+  private final AnotacaoService anotacaoService;
   private final EntityManager entityManager;
 
   @Transactional
@@ -72,6 +79,9 @@ public class AtendimentoService {
     BeanUtils.copyProperties(historicoAtendimentoDto, historicoAtendimentoModel);
 
     historicoAtendimentoRepository.save(historicoAtendimentoModel);
+
+    var anotacaoDto = new AnotacaoDto("", saved);
+    anotacaoService.save(anotacaoDto);
 
     return AtendimentoMapper.toDto(saved);
   }
@@ -141,5 +151,19 @@ public class AtendimentoService {
                         HttpStatus.NOT_FOUND, "Atendimento não encontrado"));
 
     atendimentoRepository.delete(atendimentoModel);
+  }
+
+  public List<AtendimentoDto> findByIdUsuario(UUID id, Pageable pageable) {
+    var atendimentoModel =
+        atendimentoRepository
+            .findByIdUsuario(id, PageRequest.of(0, 5))
+            .orElseThrow(
+                () ->
+                    new ResponseStatusException(HttpStatus.NOT_FOUND, "Atendimento não encontrado"))
+            .stream()
+            .map(AtendimentoMapper::toDto)
+            .toList();
+
+    return atendimentoModel;
   }
 }

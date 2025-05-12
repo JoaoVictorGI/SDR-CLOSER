@@ -5,7 +5,10 @@ import com.server.vendas.server_vendas.atendimento.dto.FindAllAtendimentoDto;
 import com.server.vendas.server_vendas.atendimento.dto.RequestAtendimentoDto;
 import com.server.vendas.server_vendas.atendimento.dto.UpdateAtendimentoDto;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,5 +53,12 @@ public class AtendimentoController {
   public ResponseEntity<String> delete(@PathVariable Long id) {
     atendimentoService.delete(id);
     return ResponseEntity.status(HttpStatus.OK).body("Atendimento deletado com sucesso");
+  }
+
+  @GetMapping("user/{id}")
+  public ResponseEntity<List<AtendimentoDto>> findByIdUsuario(
+      @PathVariable UUID id, Pageable pageable) {
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(atendimentoService.findByIdUsuario(id, pageable));
   }
 }
