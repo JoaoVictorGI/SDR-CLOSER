@@ -47,7 +47,7 @@ public class AuthenticationController {
 
   @PostMapping("auth/signup")
   public String registerUsuario(@RequestBody NoIdUsuarioDto usuario) {
-    if (usuarioRepository.existsByUsername(usuario.email())) {
+    if (usuarioRepository.existsByEmail(usuario.email())) {
       return "Error: usuário já existe";
     }
 
