@@ -1,5 +1,7 @@
 package com.server.vendas.server_vendas.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import com.server.vendas.server_vendas.security.AuthEntryPointJwt;
 import com.server.vendas.server_vendas.security.AuthTokenFilter;
 import com.server.vendas.server_vendas.usuario.service.UserDetailsServiceImpl;
@@ -49,6 +51,7 @@ public class SecurityConfig {
     var http =
         httpSecurity
             .csrf(csrf -> csrf.disable())
+            .cors(withDefaults())
             .exceptionHandling(
                 exceptionHandling ->
                     exceptionHandling.authenticationEntryPoint(unauthorizedHandler))
@@ -71,7 +74,7 @@ public class SecurityConfig {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(List.of("*"));
+    config.setAllowedOriginPatterns(List.of("*"));
     config.setAllowedMethods(List.of("*"));
     config.setAllowedHeaders(List.of("*"));
     config.setAllowCredentials(true);
