@@ -3,6 +3,7 @@ package com.server.vendas.server_vendas.usuario.controller;
 import com.server.vendas.server_vendas.security.JwtUtil;
 import com.server.vendas.server_vendas.usuario.UsuarioModel;
 import com.server.vendas.server_vendas.usuario.UsuarioRepository;
+import com.server.vendas.server_vendas.usuario.dto.LoginRequestDto;
 import com.server.vendas.server_vendas.usuario.dto.NoIdUsuarioDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,18 +27,18 @@ public class AuthenticationController {
   private final JwtUtil jwtUtil;
 
   @PostMapping("auth/signin")
-  public String authenticateUsuario(@RequestBody UsuarioModel usuario) {
+  public String authenticateUsuario(@RequestBody LoginRequestDto usuario) {
 
     var savedPassword =
         usuarioRepository
-            .findByEmail(usuario.getEmail())
+            .findByEmail(usuario.email())
             .orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
-    if (new BCryptPasswordEncoder().matches(usuario.getSenha(), savedPassword.getPassword())) {
+    if (new BCryptPasswordEncoder().matches(usuario.senha(), savedPassword.getPassword())) {
       var authentication =
           authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(usuario.getEmail(), usuario.getSenha()));
+              new UsernamePasswordAuthenticationToken(usuario.email(), usuario.senha()));
       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
       return jwtUtil.generateToken(userDetails.getUsername());
     }

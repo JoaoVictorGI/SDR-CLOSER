@@ -3,6 +3,7 @@ package com.server.vendas.server_vendas.config;
 import com.server.vendas.server_vendas.security.AuthEntryPointJwt;
 import com.server.vendas.server_vendas.security.AuthTokenFilter;
 import com.server.vendas.server_vendas.usuario.service.UserDetailsServiceImpl;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -42,23 +46,38 @@ public class SecurityConfig {
 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-    return httpSecurity
-        .csrf(csrf -> csrf.disable())
-        .cors(cors -> cors.disable())
-        .exceptionHandling(
-            exceptionHandling -> exceptionHandling.authenticationEntryPoint(unauthorizedHandler))
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(
-            authorize ->
-                authorize
-                    .requestMatchers("/swagger-ui/**")
-                    .permitAll()
-                    .requestMatchers("/v3/api-docs/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated())
-        .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-        .build();
+    var http =
+        httpSecurity
+            .csrf(csrf -> csrf.disable())
+            .exceptionHandling(
+                exceptionHandling ->
+                    exceptionHandling.authenticationEntryPoint(unauthorizedHandler))
+            .sessionManagement(
+                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(
+                authorize ->
+                    authorize
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/auth/**")
+                        .permitAll()
+                        .anyRequest()
+                        .permitAll());
+
+    http.addFilterBefore(
+        authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
+  }
+
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowedOrigins(List.of("*"));
+    config.setAllowedMethods(List.of("*"));
+    config.setAllowedHeaders(List.of("*"));
+    config.setAllowCredentials(true);
+
+    var source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    return source;
   }
 }
