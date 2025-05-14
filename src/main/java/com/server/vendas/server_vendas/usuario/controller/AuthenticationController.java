@@ -7,6 +7,7 @@ import com.server.vendas.server_vendas.usuario.dto.LoginRequestDto;
 import com.server.vendas.server_vendas.usuario.dto.NoIdUsuarioDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,9 +48,9 @@ public class AuthenticationController {
   }
 
   @PostMapping("auth/signup")
-  public String registerUsuario(@RequestBody NoIdUsuarioDto usuario) {
+  public ResponseEntity<String> registerUsuario(@RequestBody NoIdUsuarioDto usuario) {
     if (usuarioRepository.existsByEmail(usuario.email())) {
-      return "Error: usuário já existe";
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: usuário já existe");
     }
 
     var hashSenha = new BCryptPasswordEncoder().encode(usuario.senha());
@@ -57,6 +58,6 @@ public class AuthenticationController {
     var novoUsuario =
         new UsuarioModel(null, usuario.nome(), usuario.email(), hashSenha, usuario.cargo());
     usuarioRepository.save(novoUsuario);
-    return "Usuário salvo com sucesso!";
+    return ResponseEntity.status(HttpStatus.OK).body("Usuário salvo com sucesso!");
   }
 }
