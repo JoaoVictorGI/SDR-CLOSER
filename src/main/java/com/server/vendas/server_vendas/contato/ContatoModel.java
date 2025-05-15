@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import java.util.Date;
 import java.util.UUID;
@@ -38,6 +39,8 @@ public class ContatoModel {
 
   @Column(name = "dt_nascimento")
   private Date dtNascimento;
+
+  @NonNull @Email private String email;
 
   @NonNull
   @Size(min = 8, max = 16)
