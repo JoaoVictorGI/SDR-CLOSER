@@ -5,7 +5,10 @@ import com.server.vendas.server_vendas.atendimento.dto.RequestAtendimentoDto;
 
 public class AtendimentoMapper {
   public static AtendimentoDto toDto(AtendimentoModel atendimentoModel) {
-    return new AtendimentoDto(atendimentoModel.getIdUsuario(), atendimentoModel.getIdContato());
+    return new AtendimentoDto(
+        atendimentoModel.getIdAtendimento(),
+        atendimentoModel.getIdUsuario(),
+        atendimentoModel.getIdContato());
   }
 
   public static RequestAtendimentoDto toCreateRequestDto(AtendimentoModel atendimentoModel) {

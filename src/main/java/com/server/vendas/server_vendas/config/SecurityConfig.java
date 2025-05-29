@@ -4,7 +4,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 import com.server.vendas.server_vendas.security.AuthEntryPointJwt;
 import com.server.vendas.server_vendas.security.AuthTokenFilter;
-import com.server.vendas.server_vendas.usuario.service.UserDetailsServiceImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final UserDetailsServiceImpl userDetailsService;
+  // private final UserDetailsServiceImpl userDetailsService;
   private final AuthEntryPointJwt unauthorizedHandler;
 
   @Bean
@@ -63,7 +62,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/auth/**")
                         .permitAll()
                         .anyRequest()
-                        .permitAll());
+                        .authenticated());
 
     http.addFilterBefore(
         authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

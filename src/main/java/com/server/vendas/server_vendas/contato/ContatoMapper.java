@@ -8,6 +8,7 @@ public class ContatoMapper {
         contatoModel.getNome(),
         contatoModel.getSobrenome(),
         contatoModel.getDtNascimento(),
+        contatoModel.getEmail(),
         contatoModel.getNrCelular(),
         contatoModel.getNmEmpresa(),
         contatoModel.getCnpj(),

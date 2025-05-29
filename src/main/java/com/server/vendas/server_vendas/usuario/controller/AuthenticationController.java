@@ -3,6 +3,7 @@ package com.server.vendas.server_vendas.usuario.controller;
 import com.server.vendas.server_vendas.security.JwtUtil;
 import com.server.vendas.server_vendas.usuario.UsuarioModel;
 import com.server.vendas.server_vendas.usuario.UsuarioRepository;
+import com.server.vendas.server_vendas.usuario.dto.LoginDto;
 import com.server.vendas.server_vendas.usuario.dto.LoginRequestDto;
 import com.server.vendas.server_vendas.usuario.dto.NoIdUsuarioDto;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class AuthenticationController {
   private final JwtUtil jwtUtil;
 
   @PostMapping("auth/signin")
-  public String authenticateUsuario(@RequestBody LoginRequestDto usuario) {
+  public ResponseEntity<LoginDto> authenticateUsuario(@RequestBody LoginRequestDto usuario) {
 
     var savedPassword =
         usuarioRepository
@@ -41,10 +42,13 @@ public class AuthenticationController {
           authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(usuario.email(), usuario.senha()));
       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-      return jwtUtil.generateToken(userDetails.getUsername());
+      return ResponseEntity.status(HttpStatus.OK)
+          .body(
+              new LoginDto(
+                  savedPassword.getIdUsuario(), jwtUtil.generateToken(userDetails.getUsername())));
     }
 
-    return "Error: e-mail ou senha incorreta";
+    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Error: e-mail ou senha incorreta");
   }
 
   @PostMapping("auth/signup")
