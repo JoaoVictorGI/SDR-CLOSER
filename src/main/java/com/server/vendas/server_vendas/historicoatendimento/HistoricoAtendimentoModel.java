@@ -19,6 +19,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.domain.Persistable;
+import org.springframework.lang.Nullable;
 
 @Entity
 @Getter
@@ -26,7 +28,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "historico_atendimento")
-public class HistoricoAtendimentoModel {
+public class HistoricoAtendimentoModel implements Persistable<UUID> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,4 +50,15 @@ public class HistoricoAtendimentoModel {
   @UpdateTimestamp
   @Column(name = "dt_atualizacao")
   private Date dtAtualizacao;
+
+  @Override
+  public boolean isNew() {
+    return true;
+  }
+
+  @Override
+  @Nullable
+  public UUID getId() {
+    return this.idHistoricoAtendimento;
+  }
 }

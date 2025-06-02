@@ -40,6 +40,12 @@ public class HistoricoAtendimentoController {
     return ResponseEntity.status(HttpStatus.OK).body(historicoAtendimentoService.findById(id));
   }
 
+  @GetMapping("atendimento/{id}")
+  public ResponseEntity<HistoricoAtendimentoDto> findByAtendimentoId(@PathVariable Long id) {
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(historicoAtendimentoService.findByIdAtendimento(id));
+  }
+
   @PatchMapping("{id}")
   public ResponseEntity<HistoricoAtendimentoDto> update(
       @PathVariable UUID id, @RequestBody @Valid HistoricoAtendimentoDto historicoAtendimentoDto) {

@@ -13,6 +13,7 @@ import com.server.vendas.server_vendas.historicoatendimento.dto.HistoricoAtendim
 import com.server.vendas.server_vendas.produto.ProdutoRepository;
 import com.server.vendas.server_vendas.usuario.UsuarioRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
@@ -26,13 +27,14 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class AtendimentoService {
 
+  @PersistenceContext EntityManager entityManager;
+
   private final AtendimentoRepository atendimentoRepository;
   private final UsuarioRepository usuarioRepository;
   private final ContatoRepository contatoRepository;
   private final ProdutoRepository produtoRepository;
   private final HistoricoAtendimentoRepository historicoAtendimentoRepository;
   private final AnotacaoService anotacaoService;
-  private final EntityManager entityManager;
 
   @Transactional
   public AtendimentoDto save(RequestAtendimentoDto atendimentoDto) {
@@ -125,16 +127,20 @@ public class AtendimentoService {
 
     BeanUtils.copyProperties(atendimentoDto, atendimentoModel);
 
-    var historicoAtendimentoModel =
+    var historicoAnterior =
         historicoAtendimentoRepository
-            .findByIdAtendimento(atendimentoModel)
+            .findFirstByIdAtendimentoOrderByDtAtualizacaoDesc(atendimentoModel)
             .orElseThrow(
                 () ->
                     new ResponseStatusException(HttpStatus.NOT_FOUND, "Histórico não encontrado"));
 
-    historicoAtendimentoModel.setValorAnterior(historicoAtendimentoModel.getValorNovo());
-    historicoAtendimentoModel.setValorNovo(contatoModel.getStatus());
-    historicoAtendimentoRepository.save(historicoAtendimentoModel);
+    var valorAnterior = historicoAnterior.getValorNovo();
+    var historicoNovo = new HistoricoAtendimentoModel();
+    historicoNovo.setIdAtendimento(atendimentoModel);
+    historicoNovo.setValorAnterior(valorAnterior);
+    historicoNovo.setValorNovo(contatoModel.getStatus());
+
+    entityManager.persist(historicoNovo);
 
     return AtendimentoMapper.toDto(atendimentoModel);
   }

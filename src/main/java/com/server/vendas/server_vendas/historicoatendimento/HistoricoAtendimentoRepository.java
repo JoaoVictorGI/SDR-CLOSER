@@ -10,4 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface HistoricoAtendimentoRepository
     extends JpaRepository<HistoricoAtendimentoModel, UUID> {
   Optional<HistoricoAtendimentoModel> findByIdAtendimento(AtendimentoModel idAtendimento);
+
+  Optional<HistoricoAtendimentoModel> findFirstByIdAtendimentoOrderByDtAtualizacaoDesc(
+      AtendimentoModel idAtendimento);
 }

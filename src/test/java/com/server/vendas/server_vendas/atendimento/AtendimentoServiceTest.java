@@ -69,6 +69,7 @@ public class AtendimentoServiceTest {
               "Lucas",
               "Silva",
               new Date(),
+              "lucas@gmail.com",
               "48 99456-3450",
               "Lucas Marcenaria",
               "10.196.167/0001-23",
@@ -132,6 +133,7 @@ public class AtendimentoServiceTest {
               "Lucas",
               "Silva",
               new Date(),
+              "lucas@gmail.com",
               "48 99456-3450",
               "Lucas Marcenaria",
               "10.196.167/0001-23",
@@ -143,12 +145,7 @@ public class AtendimentoServiceTest {
 
       var produto = new ProdutoModel(1L, "Marketing", new ScriptModel(UUID.randomUUID(), "script"));
 
-      var input =
-          new UpdateAtendimentoDto(
-              usuario.getIdUsuario(),
-              contato.getIdContato(),
-              produto.getIdProduto(),
-              Status.AGENDADO);
+      var input = new UpdateAtendimentoDto(contato.getIdContato(), Status.AGENDADO);
 
       var atendimentoFindByIdOutput =
           new AtendimentoModel(1L, usuario, contato, produto, new Date(), null);
