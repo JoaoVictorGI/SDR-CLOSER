@@ -15,6 +15,7 @@ import com.server.vendas.server_vendas.usuario.UsuarioRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +76,7 @@ public class AtendimentoService {
 
     var historicoAtendimentoModel = new HistoricoAtendimentoModel();
     var historicoAtendimentoDto =
-        new HistoricoAtendimentoDto(saved, null, contatoModel.getStatus());
+        new HistoricoAtendimentoDto(saved, null, contatoModel.getStatus(), new Date());
     BeanUtils.copyProperties(historicoAtendimentoDto, historicoAtendimentoModel);
 
     historicoAtendimentoRepository.save(historicoAtendimentoModel);

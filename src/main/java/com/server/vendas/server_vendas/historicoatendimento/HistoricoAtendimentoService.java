@@ -1,7 +1,10 @@
 package com.server.vendas.server_vendas.historicoatendimento;
 
+import com.server.vendas.server_vendas.atendimento.AtendimentoModel;
+import com.server.vendas.server_vendas.atendimento.AtendimentoRepository;
 import com.server.vendas.server_vendas.historicoatendimento.dto.FindAllHistoricoAtendimentoDto;
 import com.server.vendas.server_vendas.historicoatendimento.dto.HistoricoAtendimentoDto;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class HistoricoAtendimentoService {
 
   private final HistoricoAtendimentoRepository historicoAtendimentoRepository;
+  private final AtendimentoRepository atendimentoRepository;
 
   public HistoricoAtendimentoDto save(HistoricoAtendimentoDto historicoAtendimentoDto) {
     var historicoModel = new HistoricoAtendimentoModel();
@@ -63,5 +67,25 @@ public class HistoricoAtendimentoService {
                     new ResponseStatusException(HttpStatus.NOT_FOUND, "Histórico não encontrado"));
 
     historicoAtendimentoRepository.delete(historicoModel);
+  }
+
+  public List<HistoricoAtendimentoDto> findByIdAtendimento(Long id) {
+    AtendimentoModel atendimentoModel =
+        atendimentoRepository
+            .findById(id)
+            .orElseThrow(
+                () ->
+                    new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Atendimento não encontrado"));
+    var historico =
+        historicoAtendimentoRepository.findByIdAtendimento(atendimentoModel).stream()
+            .map(HistoricoAtendimentoMapper::toDto)
+            .toList();
+
+    if (historico.isEmpty()) {
+      new ResponseStatusException(HttpStatus.NOT_FOUND, "Histórico de atendimento não encontrado");
+    }
+
+    return historico;
   }
 }

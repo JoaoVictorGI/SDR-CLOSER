@@ -3,6 +3,7 @@ package com.server.vendas.server_vendas.historicoatendimento;
 import com.server.vendas.server_vendas.historicoatendimento.dto.FindAllHistoricoAtendimentoDto;
 import com.server.vendas.server_vendas.historicoatendimento.dto.HistoricoAtendimentoDto;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,8 +41,8 @@ public class HistoricoAtendimentoController {
     return ResponseEntity.status(HttpStatus.OK).body(historicoAtendimentoService.findById(id));
   }
 
-  @GetMapping("atendimento/{id}")
-  public ResponseEntity<HistoricoAtendimentoDto> findByAtendimentoId(@PathVariable Long id) {
+  @GetMapping("/atendimento/{id}")
+  public ResponseEntity<List<HistoricoAtendimentoDto>> findByAtendimentoId(@PathVariable Long id) {
     return ResponseEntity.status(HttpStatus.OK)
         .body(historicoAtendimentoService.findByIdAtendimento(id));
   }

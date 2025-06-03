@@ -7,6 +7,7 @@ public class HistoricoAtendimentoMapper {
     return new HistoricoAtendimentoDto(
         historicoAtendimentoModel.getIdAtendimento(),
         historicoAtendimentoModel.getValorAnterior(),
-        historicoAtendimentoModel.getValorNovo());
+        historicoAtendimentoModel.getValorNovo(),
+        historicoAtendimentoModel.getDtAtualizacao());
   }
 }
