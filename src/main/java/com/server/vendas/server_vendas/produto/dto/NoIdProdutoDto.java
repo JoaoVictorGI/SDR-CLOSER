@@ -2,4 +2,4 @@ package com.server.vendas.server_vendas.produto.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-public record ProdutoDto(Long idProduto, String nmProduto, @NotNull String script) {}
+public record NoIdProdutoDto(String nmProduto, @NotNull String idScript) {}

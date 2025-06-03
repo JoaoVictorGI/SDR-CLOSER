@@ -462,3 +462,13 @@ values (
   'AGENDADO', 
   current_timestamp
 );
+
+select setval(
+  pg_get_serial_sequence('produto','id_produto'),
+  (select max(id_produto) from produto)
+);
+
+select setval(
+  pg_get_serial_sequence('atendimento','id_atendimento'),
+  (select max(id_atendimento) from atendimento)
+);

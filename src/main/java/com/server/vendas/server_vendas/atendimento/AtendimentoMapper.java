@@ -15,6 +15,6 @@ public class AtendimentoMapper {
     return new RequestAtendimentoDto(
         atendimentoModel.getIdUsuario().getIdUsuario(),
         atendimentoModel.getIdContato().getIdContato(),
-        atendimentoModel.getIdProduto().getIdProduto());
+        atendimentoModel.getIdProduto().getNmProduto());
   }
 }

@@ -4,10 +4,12 @@ import com.server.vendas.server_vendas.produto.dto.FindAllProdutoDto;
 import com.server.vendas.server_vendas.produto.dto.ProdutoDto;
 import com.server.vendas.server_vendas.script.ScriptMapper;
 import com.server.vendas.server_vendas.script.ScriptService;
+import com.server.vendas.server_vendas.script.dto.CreateScriptRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -17,12 +19,14 @@ public class ProdutoService {
   private final ProdutoRepository produtoRepository;
   private final ScriptService scriptService;
 
+  @Transactional
   public ProdutoDto save(ProdutoDto produtoDto) {
-    var scriptModel = ScriptMapper.toModel(scriptService.findById(produtoDto.idScript()));
+    var script = scriptService.save(new CreateScriptRequest(produtoDto.script()));
 
     var produtoModel = new ProdutoModel();
     BeanUtils.copyProperties(produtoDto, produtoModel, "idScript");
-    produtoModel.setIdScript(scriptModel);
+
+    produtoModel.setIdScript(ScriptMapper.toModel(script));
 
     return ProdutoMapper.toDto(produtoRepository.save(produtoModel));
   }

@@ -4,4 +4,4 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record RequestAtendimentoDto(
-    @NotNull UUID idUsuario, @NotNull UUID idContato, @NotNull Long idProduto) {}
+    @NotNull UUID idUsuario, @NotNull UUID idContato, @NotNull String nmProduto) {}

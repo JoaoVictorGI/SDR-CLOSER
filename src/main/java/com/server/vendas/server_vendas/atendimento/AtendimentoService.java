@@ -10,7 +10,11 @@ import com.server.vendas.server_vendas.contato.ContatoRepository;
 import com.server.vendas.server_vendas.historicoatendimento.HistoricoAtendimentoModel;
 import com.server.vendas.server_vendas.historicoatendimento.HistoricoAtendimentoRepository;
 import com.server.vendas.server_vendas.historicoatendimento.dto.HistoricoAtendimentoDto;
-import com.server.vendas.server_vendas.produto.ProdutoRepository;
+import com.server.vendas.server_vendas.produto.ProdutoMapper;
+import com.server.vendas.server_vendas.produto.ProdutoService;
+import com.server.vendas.server_vendas.produto.dto.ProdutoDto;
+import com.server.vendas.server_vendas.script.ScriptService;
+import com.server.vendas.server_vendas.script.dto.CreateScriptRequest;
 import com.server.vendas.server_vendas.usuario.UsuarioRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -33,9 +37,10 @@ public class AtendimentoService {
   private final AtendimentoRepository atendimentoRepository;
   private final UsuarioRepository usuarioRepository;
   private final ContatoRepository contatoRepository;
-  private final ProdutoRepository produtoRepository;
+  private final ProdutoService produtoService;
   private final HistoricoAtendimentoRepository historicoAtendimentoRepository;
   private final AnotacaoService anotacaoService;
+  private final ScriptService scriptService;
 
   @Transactional
   public AtendimentoDto save(RequestAtendimentoDto atendimentoDto) {
@@ -52,11 +57,9 @@ public class AtendimentoService {
             .orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contato não encontrado"));
 
-    var produtoModel =
-        produtoRepository
-            .findById(atendimentoDto.idProduto())
-            .orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+    var script = scriptService.save(new CreateScriptRequest(""));
+
+    var produto = produtoService.save(new ProdutoDto(null, atendimentoDto.nmProduto(), null));
 
     var atendimentoModel = new AtendimentoModel();
     BeanUtils.copyProperties(
@@ -65,11 +68,12 @@ public class AtendimentoService {
         "idUsuario",
         "idContato",
         "idProduto",
+        "nmProduto",
         "dtCriacao",
         "dtAtualizacao");
     atendimentoModel.setIdUsuario(usuarioModel);
     atendimentoModel.setIdContato(contatoModel);
-    atendimentoModel.setIdProduto(produtoModel);
+    atendimentoModel.setIdProduto(ProdutoMapper.toModel(produto));
 
     var saved = atendimentoRepository.saveAndFlush(atendimentoModel);
     entityManager.refresh(saved);
