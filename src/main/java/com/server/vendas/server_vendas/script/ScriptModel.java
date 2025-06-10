@@ -25,5 +25,6 @@ public class ScriptModel {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID idScript;
 
+  @Column(columnDefinition = "TEXT")
   private String script;
 }

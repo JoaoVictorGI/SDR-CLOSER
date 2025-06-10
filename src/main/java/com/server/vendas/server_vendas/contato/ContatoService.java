@@ -17,7 +17,7 @@ public class ContatoService {
 
   public ContatoDto save(ContatoDto contatoDto) {
     var contatoModel = new ContatoModel();
-    BeanUtils.copyProperties(contatoDto, contatoModel);
+    BeanUtils.copyProperties(contatoDto, contatoModel, "idContato");
 
     return ContatoMapper.toDto(contatoRepository.save(contatoModel));
   }
@@ -45,7 +45,7 @@ public class ContatoService {
             .orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contato não encontrado"));
 
-    BeanUtils.copyProperties(contatoDto, contatoModel);
+    BeanUtils.copyProperties(contatoDto, contatoModel, "idContato");
 
     return ContatoMapper.toDto(contatoRepository.save(contatoModel));
   }

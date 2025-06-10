@@ -10,6 +10,7 @@ public class ProdutoMapper {
     return new ProdutoDto(
         produtoModel.getIdProduto(),
         produtoModel.getNmProduto(),
+        produtoModel.getIdScript().getIdScript(),
         produtoModel.getIdScript().getScript());
   }
 

@@ -70,4 +70,18 @@ public class AnotacaoService {
 
     return AnotacaoMapper.toDto(anotacaoModel);
   }
+
+  public AnotacaoDto updateByIdAtendimento(Long idAtendimento, String anotacao) {
+    var anotacaoModel =
+        anotacaoRepository
+            .findByIdAtendimento(1L)
+            .orElseThrow(
+                () ->
+                    new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Atendimento não encontrado"));
+
+    anotacaoModel.setAnotacao(anotacao);
+
+    return AnotacaoMapper.toDto(anotacaoRepository.save(anotacaoModel));
+  }
 }

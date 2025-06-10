@@ -4,8 +4,10 @@ import com.server.vendas.server_vendas.contato.Status;
 import io.micrometer.common.lang.NonNull;
 import jakarta.validation.constraints.Email;
 import java.util.Date;
+import java.util.UUID;
 
 public record ContatoDto(
+    UUID idContato,
     @NonNull String nome,
     @NonNull String sobrenome,
     Date dtNascimento,

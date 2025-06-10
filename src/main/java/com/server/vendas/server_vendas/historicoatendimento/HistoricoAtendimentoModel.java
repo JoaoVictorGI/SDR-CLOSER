@@ -18,6 +18,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.domain.Persistable;
 import org.springframework.lang.Nullable;
@@ -36,6 +38,7 @@ public class HistoricoAtendimentoModel implements Persistable<UUID> {
   private UUID idHistoricoAtendimento;
 
   @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "id_atendimento")
   private AtendimentoModel idAtendimento;
 

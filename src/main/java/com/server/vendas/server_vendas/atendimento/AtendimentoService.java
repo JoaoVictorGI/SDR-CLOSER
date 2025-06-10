@@ -7,6 +7,7 @@ import com.server.vendas.server_vendas.atendimento.dto.FindAllAtendimentoDto;
 import com.server.vendas.server_vendas.atendimento.dto.RequestAtendimentoDto;
 import com.server.vendas.server_vendas.atendimento.dto.UpdateAtendimentoDto;
 import com.server.vendas.server_vendas.contato.ContatoRepository;
+import com.server.vendas.server_vendas.contato.Status;
 import com.server.vendas.server_vendas.historicoatendimento.HistoricoAtendimentoModel;
 import com.server.vendas.server_vendas.historicoatendimento.HistoricoAtendimentoRepository;
 import com.server.vendas.server_vendas.historicoatendimento.dto.HistoricoAtendimentoDto;
@@ -57,9 +58,52 @@ public class AtendimentoService {
             .orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contato não encontrado"));
 
-    var script = scriptService.save(new CreateScriptRequest(""));
+    var script =
+        scriptService.save(
+            new CreateScriptRequest(
+"""
+        <ol>
+  <li><strong>Abertura</strong><br>
+    SDR: “Olá [Nome], aqui é [Seu Nome] da [Sua Empresa]. Posso tomar 2 minutos do seu tempo?”
+  </li>
 
-    var produto = produtoService.save(new ProdutoDto(null, atendimentoDto.nmProduto(), null));
+  <li><strong>Pergunta 1 – Processos Atuais</strong><br>
+    SDR: “Como vocês coletam e centralizam feedbacks no Figma hoje?”
+  </li>
+
+  <li><strong>Pergunta 2 – Stakeholders</strong><br>
+    SDR: “Quem são os principais envolvidos nesse processo (designers, desenvolvedores, PMs)?”
+  </li>
+
+  <li><strong>Pergunta 3 – Gargalos</strong><br>
+    SDR: “Quais atrasos ou retrabalhos vocês enfrentam por falta de clareza nos comentários?”
+  </li>
+
+  <li><strong>Pergunta 4 – Métrica de Tempo</strong><br>
+    SDR: “Quanto tempo, em média, vocês levam em cada ciclo de revisão de um wireframe?”
+  </li>
+
+  <li><strong>Pergunta 5 – Prazo</strong><br>
+    SDR: “Vocês possuem uma data-limite para finalizar o ciclo de revisões deste sprint?”
+  </li>
+
+  <li><strong>Pergunta 6 – Aprovação Interna</strong><br>
+    SDR: “Quais etapas internas são necessárias para aprovar a adoção de uma nova ferramenta de design?”
+  </li>
+
+  <li><strong>Pergunta 7 – Impacto Negativo</strong><br>
+    SDR: “Qual seria o impacto no roadmap ou no planejamento de produto se esse processo não for agilizado?”
+  </li>
+
+  <li><strong>Call to Action</strong><br>
+    SDR: “Gostaria de agendar uma demonstração de 15 minutos com nosso especialista em Figma para mostrar o protótipo interativo?”
+  </li>
+</ol>
+"""));
+
+    var produto =
+        produtoService.save(
+            new ProdutoDto(null, atendimentoDto.nmProduto(), script.idScript(), script.script()));
 
     var atendimentoModel = new AtendimentoModel();
     BeanUtils.copyProperties(
@@ -77,6 +121,8 @@ public class AtendimentoService {
 
     var saved = atendimentoRepository.saveAndFlush(atendimentoModel);
     entityManager.refresh(saved);
+
+    anotacaoService.save(new AnotacaoDto(null, saved));
 
     var historicoAtendimentoModel = new HistoricoAtendimentoModel();
     var historicoAtendimentoDto =
@@ -158,6 +204,11 @@ public class AtendimentoService {
                 () ->
                     new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Atendimento não encontrado"));
+
+    var contatoModel = atendimentoModel.getIdContato();
+    contatoModel.setStatus(Status.NAO_AGENDADO);
+
+    contatoRepository.save(contatoModel);
 
     atendimentoRepository.delete(atendimentoModel);
   }

@@ -2,6 +2,7 @@ package com.server.vendas.server_vendas.anotacao;
 
 import com.server.vendas.server_vendas.anotacao.dto.AnotacaoDto;
 import com.server.vendas.server_vendas.anotacao.dto.FindAllAnotacaoDto;
+import com.server.vendas.server_vendas.anotacao.dto.UpdateAnotacaoByIdAtendimentoDto;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -53,5 +54,12 @@ public class AnotacaoController {
   @GetMapping("atendimento/{id}")
   public ResponseEntity<AnotacaoDto> findByIdAtendimento(@PathVariable Long id) {
     return ResponseEntity.status(HttpStatus.OK).body(anotacaoService.findByIdAtendimento(id));
+  }
+
+  @PatchMapping("atendimento/{id}")
+  public ResponseEntity<AnotacaoDto> update(
+      @PathVariable Long id, @RequestBody @Valid UpdateAnotacaoByIdAtendimentoDto anotacao) {
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(anotacaoService.updateByIdAtendimento(id, anotacao.anotacao()));
   }
 }

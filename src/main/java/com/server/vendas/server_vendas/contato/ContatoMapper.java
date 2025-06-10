@@ -5,6 +5,7 @@ import com.server.vendas.server_vendas.contato.dto.ContatoDto;
 public class ContatoMapper {
   public static ContatoDto toDto(ContatoModel contatoModel) {
     return new ContatoDto(
+        contatoModel.getIdContato(),
         contatoModel.getNome(),
         contatoModel.getSobrenome(),
         contatoModel.getDtNascimento(),
